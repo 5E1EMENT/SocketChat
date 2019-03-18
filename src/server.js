@@ -6,9 +6,9 @@ var express = require('express');
 
 app.use(express.static(__dirname));
 
-app.get('/', function(req, res){
+app.get('/dist', function(req, res){
 
-    res.sendFile(__dirname + '/index.html');
+    res.sendFile(__dirname + '/dist/index.html');
 });
 
 

@@ -29,6 +29,7 @@
         input.value = '';
         return false;
     }
+    //По кнопке
     function btnSubmit(e) {
 
         if(e.keyCode === 13) {
