@@ -2,8 +2,6 @@
 
 import './css/main.css'
 import './scss/main.scss'
-import './js/chat'
-// import 'socket.io'
 
 
 // import Bootstrap from 'bootstrap/dist/css/bootstrap.min.css'

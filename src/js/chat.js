@@ -1,8 +1,10 @@
-(function () {
+
+window.onload = function() {
     var socket = io('http://localhost:3000');
     let form = document.querySelector('.chat-form');
     let messages = document.querySelector('.messages-list');
     let submitbtn = document.querySelector('.submit');
+    let participants = document.querySelector('.participants-number');
 
     //Через Handlebars выводим все данные из data
     const template = document.querySelector('#comments').textContent;
@@ -25,11 +27,17 @@
     //По клику
     function clickSubmit(e) {
         let input = document.querySelector('.chat-input');
-        socket.emit('chat message',input.value);
+        let val = input.value;
+
+        //Проверка на ввод символов
+        if (val.length <= 0) {
+            return false;
+        }
+
+        socket.emit('chat message',val);
         input.value = '';
         return false;
     }
-    //По кнопке
     function btnSubmit(e) {
 
         if(e.keyCode === 13) {
@@ -44,6 +52,14 @@
 
     //Отправляем сообщение по клиук
     submitbtn.addEventListener('click', clickSubmit);
+
+
+    socket.on('eventClient', function (data) {
+        let count = data.data;
+        participants.innerHTML = count;
+    });
+    socket.emit('eventServer', { data: 'Hello Server' });
+
 
     socket.on('chat message', function(msg){
 
@@ -64,5 +80,4 @@
         const htmlComments = render(dataComments[finalDate]);//Берем данные из массива
         messages.innerHTML = htmlComments;//Запихиваем в html
     });
-
-})();
+}
