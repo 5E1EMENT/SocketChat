@@ -1,6 +1,7 @@
 
+import {clickSubmit,btnSubmit, socket } from "./functions";
 window.onload = function() {
-    var socket = io('http://localhost:3000');
+
     let form = document.querySelector('.chat-form');
     let messages = document.querySelector('.messages-list');
     let submitbtn = document.querySelector('.submit');
@@ -10,6 +11,7 @@ window.onload = function() {
     const template = document.querySelector('#comments').textContent;
     const render = Handlebars.compile(template);
     const body = document.body;
+
     //Массив с комментариями
     let dataComments = {};
 
@@ -24,39 +26,19 @@ window.onload = function() {
     };
     let finalDate = date.toLocaleString("ru", dateOptions);
 
-    //По клику
-    function clickSubmit(e) {
-        let input = document.querySelector('.chat-input');
-        let val = input.value;
-
-        //Проверка на ввод символов
-        if (val.length <= 0) {
-            return false;
-        }
-
-        socket.emit('chat message',val);
-        input.value = '';
-        return false;
-    }
-    function btnSubmit(e) {
-
-        if(e.keyCode === 13) {
-            clickSubmit();
-
-        }
-
-    }
 
     //Отправляем сообщение по нажатию Enter
     body.addEventListener('keyup',btnSubmit);
 
-    //Отправляем сообщение по клиук
+    //Отправляем сообщение по клику
     submitbtn.addEventListener('click', clickSubmit);
-
 
     socket.on('eventClient', function (data) {
         let count = data.data;
+        let clients = data.clients;
         participants.innerHTML = count;
+
+        //console.log(clients);
     });
     socket.emit('eventServer', { data: 'Hello Server' });
 
@@ -66,7 +48,7 @@ window.onload = function() {
         let comment = {
             "text": msg
         }
-        console.log(dataComments[finalDate]);
+        // console.log(dataComments[finalDate]);
         if(dataComments[finalDate]) {
 
             dataComments[finalDate].push(comment);
@@ -75,8 +57,7 @@ window.onload = function() {
             dataComments[finalDate].push(comment);
         }
 
-        console.log(dataComments);
-
+        console.log("Тело коммента",dataComments[finalDate],"комменты",dataComments);
         const htmlComments = render(dataComments[finalDate]);//Берем данные из массива
         messages.innerHTML = htmlComments;//Запихиваем в html
     });

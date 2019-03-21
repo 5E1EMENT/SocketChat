@@ -36,6 +36,8 @@
     "webpack-merge": "^4.2.1"
   },
   "dependencies": {
+    "axios": "^0.18.0",
+    "body-parser": "^1.18.3",
     "express": "^4.15.2",
     "socket.io": "^2.2.0",
     "vue": "^2.5.21"
