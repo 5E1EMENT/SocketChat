@@ -5,7 +5,7 @@ let modal = document.querySelector('#modal-authorization');
 let submitbtn = document.querySelector('.submit');
 let profileName = document.querySelector('.profile-name');
 let contacts = document.querySelector('#contacts ul');
-
+let participants = document.querySelector('#participants h3');
 
 const template = document.querySelector('#users').textContent;
 const render = Handlebars.compile(template);
@@ -38,53 +38,56 @@ enter.addEventListener('click', function (e) {
 
         //В ответ получаем данные о всех участниках
         socket.on('clientsData', function (data) {
-            let dataClients = data;
-            console.log("Данные",dataClients);
 
+            let dataClients = data; // Массив с данными
 
-            for(let data in dataClients) {
+             //Массив со значениями участников
+            let ClientData = Object.values(dataClients);
 
-                let clientsNames = dataClients[data];
+            // console.log("Данные о участниках",ClientData);
 
-                // console.log("Данные по клиентам",clientsNames);
+            //Данные о участниках(номер - имя)
+            let participants = Object.values(ClientData);//
 
-                 for(let name in clientsNames) {
-                     let user = {
-                         "username": name
-                     }
+            // console.log(" participant",participants);
 
-                     let clientsData = clientsNames[name];
-                     let [clientNumber, clientName] = clientsData;
-                     console.log("Номер",clientNumber,"Имя", clientName);
+            //Перебираем каждое значение об участнике
+            for (let participant of participants) {
 
-                     if(users[clientNumber]) {
-                         users[clientNumber].push(user)
-                     } else {
-                         users[clientNumber] = [];
-                         users[clientNumber].push(user)
-                     }
-                     const dataKeys = Object.keys(users);
+                //Ключ
+                let participantKey = Object.keys(participant);
 
-                     dataKeys.forEach(function (key) {
-                         console.log("Юзерс",users,"Юзерскей",users[key]);
-                         const htmlUsers = render(users[key]);//Берем данные из массива
-                         contacts.innerHTML = htmlUsers;//Запихиваем в html
-                     })
+                // console.log("participantKey",participantKey);
 
+                for(let participantValue in participant) {
+                    //Данные о пользователе(имя)
+                    let user = {
+                        username: participant[participantValue]
+                    }
 
+                    if(users[participantKey]) {
+                        users[participantKey].push(user);
+                    } else {
+                        users[participantKey] = [];
+                        users[participantKey].push(user);
+                    }
 
+                    //console.log(users[participantKey]);
 
-                 }
+                    const htmlUsers = render(users[participantKey]);//Берем данные из массива
+                    contacts.innerHTML = htmlUsers;//Запихиваем в html
 
+                }
 
             }
+
         });
 
         //Выводим имя
         profileName.textContent = fioValue;
+        //Отображаем количество участников
+        participants.style.display = "block";
 
-        // const htmlComments = render(dataComments[finalDate]);//Берем данные из массива
-        // messages.innerHTML = htmlComments;//Запихиваем в html
     }
 
 

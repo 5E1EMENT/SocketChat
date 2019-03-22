@@ -27,6 +27,10 @@ io.on('connection', function(socket){
     //При отключении пользователя, обновить результат
     socket.on('disconnect', function() {
         io.sockets.emit('eventClient',  {data: io.engine.clientsCount });
+        delete clients[socket.client.id];
+        console.log(clients);
+        console.log(socket.client.id);
+        io.sockets.emit('clientsData',  {data: clients });
     });
 
     //Событие по клику на кнопку войти
@@ -35,13 +39,11 @@ io.on('connection', function(socket){
         let AuthorizationData = loginData;
 
         //Если уже есть такой ник
-        if(clients[AuthorizationData.nick]) {
-            clients[AuthorizationData.nick].push(socket.client.id);
-            clients[AuthorizationData.nick].push(fio);
+        if(clients[socket.client.id]) {
+            clients[socket.client.id]= fio;
         } else { //Если нет, то создаем пустой массив и пушим
-            clients[AuthorizationData.nick] = [];
-            clients[AuthorizationData.nick].push(socket.client.id);
-            clients[AuthorizationData.nick].push(fio);
+            clients[socket.client.id] = [];
+            clients[socket.client.id] = fio;
         }
 
 
