@@ -4,8 +4,10 @@ let enter = document.querySelector('.form-input__btn');
 let modal = document.querySelector('#modal-authorization');
 let submitbtn = document.querySelector('.submit');
 let profileName = document.querySelector('.profile-name');
+let profileImg = document.getElementById('profile-img');
 let contacts = document.querySelector('#contacts ul');
 let participants = document.querySelector('#participants h3');
+
 let messages = document.querySelector('.messages-list');
 
 const template = document.querySelector('#users').textContent;
@@ -21,12 +23,6 @@ enter.addEventListener('click', function (e) {
     let nickValue = nick.value.trim();
 
     if(validate(fio,nick)) {
-        console.log(fioValue,nickValue);
-        //Данные формы
-        let Data = {
-            fio: fioValue,
-            nick: nickValue
-        }
 
         //Отправляем на сервер с событием eventSubmitClient данные
         socket.emit('eventSubmitClient', nickValue, fioValue);
@@ -94,6 +90,13 @@ enter.addEventListener('click', function (e) {
         //Отображаем комментарии
         messages.style.display = "block";
 
+        //Даем возможность клика
+        profileImg.classList.remove('unclickable');
+        profileImg.classList.add('clickable');
+
+        //Подсвечиваем статус
+        profileImg.classList.remove('offline');
+        profileImg.classList.add('online');
     }
 
 

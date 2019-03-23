@@ -17,7 +17,7 @@
     <div id="sidepanel">
       <div id="profile">
         <div class="wrap">
-          <img id="profile-img" src="/assets/img/no-photo.png" class="online" alt="" />
+          <img id="profile-img" src="/assets/img/no-photo.png" class="offline unclickable" alt="" />
           <p class="profile-name">Добро пожаловать!</p>
           <i class="fa fa-chevron-down expand-button" aria-hidden="true"></i>
           <div id="status-options">
@@ -33,24 +33,7 @@
       </div>
       <div id="contacts">
         <ul>
-          <!--<li class="contact">-->
-            <!--<div class="wrap">-->
-              <!--<span class="contact-status online"></span>-->
-              <!--<img src="http://emilcarlsson.se/assets/mikeross.png" alt="" />-->
-              <!--<div class="meta">-->
-                <!--<p class="name">Даниил Никитас</p><p class="name-you"></p>-->
-              <!--</div>-->
-            <!--</div>-->
-          <!--</li>-->
-          <!--<li class="contact">-->
-            <!--<div class="wrap">-->
-              <!--<span class="contact-status online"></span>-->
-              <!--<img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />-->
-              <!--<div class="meta">-->
-                <!--<p class="name">Игорь Яицкий</p>-->
-              <!--</div>-->
-            <!--</div>-->
-          <!--</li>-->
+
         </ul>
       </div>
 
@@ -62,11 +45,6 @@
           <!--<li class="message sent">-->
             <!--<img src="http://emilcarlsson.se/assets/mikeross.png" alt="" />-->
             <!--<p class="message-text">How the hell am I supposed to get a jury to believe you when I am not even sure that I do?!</p>-->
-          <!--</li>-->
-          <!--<li class="message replies">-->
-            <!--<img src="http://emilcarlsson.se/assets/louislitt.png" alt="" />-->
-            <!--<p class="message-text">When you're backed against the wall, break the god damn thing down.</p>-->
-          <!--</li>-->
 
         </ul>
         <div id="modal-authorization">
@@ -81,6 +59,20 @@
             </form>
           </div>
         </div>
+        <div class="upload">
+          <div class="upload-wrapper">
+            <h2 class="upload-title">Загрузка фото</h2>
+            <form class="upload-area">
+              <h3 class="upload-area__title">Перетащите сюда фото</h3>
+              <input type="file" id="fileElem" accept="image/*" >
+            </form>
+            <div class="upload-btn__wrapper">
+              <button id="uploadBtnCancel" class="upload-btn cancel">Отмена</button>
+            </div>
+            <div class="close"></div>
+
+          </div>
+        </div>
       </div>
       <div class="message-input">
         <div class="wrap">
@@ -91,12 +83,14 @@
     </div>
   </div>
 
+
+
   <script src="http://localhost:3000/socket.io/socket.io.js"></script>
 
   <script id="comments" type="text/x-handlebars-template">
     {{#each this}}
     <li class="message sent">
-      <img src="http://emilcarlsson.se/assets/mikeross.png" alt="" />
+      <img id="chat-img" src="/assets/img/no-photo.png" class="online" alt="" />
       <div class="text-wrapper">
         <div class="text-wrapper__data">
           <span class="message-name">{{name}}</span>
@@ -122,6 +116,13 @@
     {{/each}}
   </script>
 
+  <script>
+      function handleFiles(files) {
+          files = [...files];
+          files.forEach(uploadFile);
+          files.forEach(previewFile);
+      }
+  </script>
 
 
 

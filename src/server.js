@@ -1,10 +1,33 @@
+//Переменные
 var express = require('express');
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-
+var cors = require('cors');
+var upload = require("express-fileupload");
 var clients = {};
-var clientsLogin = {};
+
+//Модули
+app.use(cors());
+app.use(upload());
+
+app.post("/", function (req, res) {
+    console.log(req.files.file)
+    if(req.files) {
+        var filename = req.files.file.name;
+        req.files.file.mv("./upload/"+filename, function (err) {
+            if(err) {
+                console.log(err);
+                res.send("error occured")
+            } else {
+                res.send("Done!")
+            }
+        })
+        console.log(req.files);
+    }
+})
+
+
 
 app.use(express.static(__dirname));
 
@@ -21,7 +44,7 @@ io.on('connection', function(socket){
     socket.on('chat message', function(msg){
 
         //Передаем сообщение и имя того, кто отправляет
-        io.sockets.emit('chat message', msg,clients[socket.client.id],clientsLogin[socket.client.id]);
+        io.sockets.emit('chat message', msg,clients[socket.client.id]);
         console.log(msg,clients[socket.client.id]);
     });
 
@@ -47,13 +70,6 @@ io.on('connection', function(socket){
             clients[socket.client.id] = fio;
         }
 
-        if(clientsLogin[socket.client.id]) {
-            clientsLogin[socket.client.id]= AuthorizationData;
-        } else { //Если нет, то создаем пустой массив и пушим
-            clientsLogin[socket.client.id] = [];
-            clientsLogin[socket.client.id] = AuthorizationData;
-        }
-        console.log("logins",clientsLogin);
 
         io.sockets.emit('clientsData',  {data: clients });
 
@@ -78,5 +94,6 @@ io.on('connection', function(socket){
 
 
 http.listen(3000, function(){
+
     console.log('listening on *:3000');
 });

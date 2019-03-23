@@ -42,10 +42,8 @@ window.onload = function() {
     socket.emit('eventServer', { data: 'Hello Server' });
 
 
-    socket.on('chat message', function(msg,name,login){
+    socket.on('chat message', function(msg,name){
 
-              console.log(login);
-            let userLogin = login;
             let username = name;
 
             let dateComment = new Date();
