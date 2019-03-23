@@ -4,6 +4,7 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
 var clients = {};
+var clientsLogin = {};
 
 app.use(express.static(__dirname));
 
@@ -13,21 +14,23 @@ app.get('/', function(req, res){
 });
 
 
-//Когда соединяемся с клиентом
+//Когда соединяемся с чатом
 io.on('connection', function(socket){
 
     //Передаем значение сообщения
     socket.on('chat message', function(msg){
-        io.sockets.emit('chat message', msg);
-        console.log(msg);
+
+        //Передаем сообщение и имя того, кто отправляет
+        io.sockets.emit('chat message', msg,clients[socket.client.id],clientsLogin[socket.client.id]);
+        console.log(msg,clients[socket.client.id]);
     });
 
     //При отключении пользователя, обновить результат
     socket.on('disconnect', function() {
         io.sockets.emit('eventClient',  {data: io.engine.clientsCount });
+        console.log("То, что удаляем",clients[socket.client.id]);
         delete clients[socket.client.id];
         console.log(clients);
-        console.log(socket.client.id);
         io.sockets.emit('clientsData',  {data: clients });
     });
 
@@ -36,21 +39,26 @@ io.on('connection', function(socket){
 
         let AuthorizationData = loginData;
 
-        //Если уже есть такой ник
+        //Если уже есть такой номер
         if(clients[socket.client.id]) {
             clients[socket.client.id]= fio;
-            //clients[socket.client.id]= loginData;
         } else { //Если нет, то создаем пустой массив и пушим
             clients[socket.client.id] = [];
             clients[socket.client.id] = fio;
-            //clients[socket.client.id] = loginData;
         }
 
+        if(clientsLogin[socket.client.id]) {
+            clientsLogin[socket.client.id]= AuthorizationData;
+        } else { //Если нет, то создаем пустой массив и пушим
+            clientsLogin[socket.client.id] = [];
+            clientsLogin[socket.client.id] = AuthorizationData;
+        }
+        console.log("logins",clientsLogin);
 
         io.sockets.emit('clientsData',  {data: clients });
 
 
-        console.log(clients);
+        //console.log(clients);
     });
 
 

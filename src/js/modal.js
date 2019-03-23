@@ -29,7 +29,7 @@ enter.addEventListener('click', function (e) {
         }
 
         //Отправляем на сервер с событием eventSubmitClient данные
-        socket.emit('eventSubmitClient', Data, fioValue);
+        socket.emit('eventSubmitClient', nickValue, fioValue);
 
         //Убираем модалку
         modal.style.display = 'none';

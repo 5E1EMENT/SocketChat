@@ -16,6 +16,16 @@ window.onload = function() {
     //Массив с комментариями
     let dataComments = {};
 
+    let date = new Date();
+    let dateOptions = {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric'
+    };
+    let dateStart = date.toLocaleString("ru", dateOptions);
+
 
     //Отправляем сообщение по нажатию Enter
     body.addEventListener('keyup',btnSubmit);
@@ -32,9 +42,11 @@ window.onload = function() {
     socket.emit('eventServer', { data: 'Hello Server' });
 
 
-    socket.on('chat message', function(msg,clients){
+    socket.on('chat message', function(msg,name,login){
 
-
+              console.log(login);
+            let userLogin = login;
+            let username = name;
 
             let dateComment = new Date();
             let dateOptionsComment = {
@@ -48,15 +60,17 @@ window.onload = function() {
 
             let comment = {
                 "text": msg,
-                "time": finalDateComment
+                "time": finalDateComment,
+                "name": username
             }
-            // console.log(dataComments[finalDate]);
-            if (dataComments[dateComment]) {
 
-                dataComments[dateComment].push(comment);
+            //Ключём будет дата запуска чата
+            if (dataComments[dateStart]) {
+
+                dataComments[dateStart].push(comment);
             } else { //Если нет, то создаем пустой массив и пушим
-                dataComments[dateComment] = [];
-                dataComments[dateComment].push(comment);
+                dataComments[dateStart] = [];
+                dataComments[dateStart].push(comment);
             }
             for (var key in dataComments) {
                 console.log(key);
