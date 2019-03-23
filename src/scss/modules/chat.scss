@@ -590,14 +590,9 @@
   display: inline-block;
   padding: 10px 15px;
   border-radius: 20px;
-  max-width: 205px;
   line-height: 130%;
 }
-@media screen and (min-width: 735px) {
-  #frame .content .messages ul li p {
-    max-width: 300px;
-  }
-}
+
 #frame .content .message-input {
   border-top: 2px solid;
   padding-top: 20px;
@@ -666,4 +661,18 @@
 }
 #frame .content .message-input .wrap button:focus {
   outline: none;
+}
+.message-text {
+  display: inline-block;
+  background: #32465a;
+  padding: 10px;
+  border-radius: 20px;
+  color: white;
+  font-family: "proxima-nova",  "Source Sans Pro", sans-serif;
+}
+.text-wrapper {
+
+}
+.messages-list {
+  display: none;
 }

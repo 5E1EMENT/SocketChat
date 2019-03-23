@@ -6,6 +6,7 @@ window.onload = function() {
     let messages = document.querySelector('.messages-list');
     let submitbtn = document.querySelector('.submit');
     let participants = document.querySelector('.participants-number');
+    let chatInput = document.querySelector('.chat-input');
 
     //Через Handlebars выводим все данные из data
     const template = document.querySelector('#comments').textContent;
@@ -14,17 +15,6 @@ window.onload = function() {
 
     //Массив с комментариями
     let dataComments = {};
-
-    //Ключами будет дата
-    var date = new Date();
-    var dateOptions = {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric'
-    };
-    let finalDate = date.toLocaleString("ru", dateOptions);
 
 
     //Отправляем сообщение по нажатию Enter
@@ -35,7 +25,6 @@ window.onload = function() {
 
     socket.on('eventClient', function (data) {
         let count = data.data;
-        let clients = data.clients;
         participants.innerHTML = count;
 
         //console.log(clients);
@@ -43,22 +32,41 @@ window.onload = function() {
     socket.emit('eventServer', { data: 'Hello Server' });
 
 
-    socket.on('chat message', function(msg){
+    socket.on('chat message', function(msg,clients){
 
-        let comment = {
-            "text": msg
-        }
-        // console.log(dataComments[finalDate]);
-        if(dataComments[finalDate]) {
 
-            dataComments[finalDate].push(comment);
-        } else { //Если нет, то создаем пустой массив и пушим
-            dataComments[finalDate] = [];
-            dataComments[finalDate].push(comment);
-        }
 
-        console.log("Тело коммента",dataComments[finalDate],"комменты",dataComments);
-        const htmlComments = render(dataComments[finalDate]);//Берем данные из массива
-        messages.innerHTML = htmlComments;//Запихиваем в html
+            let dateComment = new Date();
+            let dateOptionsComment = {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric'
+            };
+            let finalDateComment = dateComment.toLocaleString("ru", dateOptionsComment);
+
+            let comment = {
+                "text": msg,
+                "time": finalDateComment
+            }
+            // console.log(dataComments[finalDate]);
+            if (dataComments[dateComment]) {
+
+                dataComments[dateComment].push(comment);
+            } else { //Если нет, то создаем пустой массив и пушим
+                dataComments[dateComment] = [];
+                dataComments[dateComment].push(comment);
+            }
+            for (var key in dataComments) {
+                console.log(key);
+                const htmlComments = render(dataComments[key]);//Берем данные из массива
+                messages.innerHTML = htmlComments;//Запихиваем в html
+
+
+            }
+
+        chatInput.focus();
+
     });
 }

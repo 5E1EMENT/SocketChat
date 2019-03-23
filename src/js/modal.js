@@ -6,6 +6,7 @@ let submitbtn = document.querySelector('.submit');
 let profileName = document.querySelector('.profile-name');
 let contacts = document.querySelector('#contacts ul');
 let participants = document.querySelector('#participants h3');
+let messages = document.querySelector('.messages-list');
 
 const template = document.querySelector('#users').textContent;
 const render = Handlebars.compile(template);
@@ -38,6 +39,7 @@ enter.addEventListener('click', function (e) {
 
         //В ответ получаем данные о всех участниках
         socket.on('clientsData', function (data) {
+
 
             let dataClients = data; // Массив с данными
 
@@ -85,8 +87,12 @@ enter.addEventListener('click', function (e) {
 
         //Выводим имя
         profileName.textContent = fioValue;
+
         //Отображаем количество участников
         participants.style.display = "block";
+
+        //Отображаем комментарии
+        messages.style.display = "block";
 
     }
 

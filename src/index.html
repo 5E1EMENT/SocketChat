@@ -97,7 +97,15 @@
     {{#each this}}
     <li class="message sent">
       <img src="http://emilcarlsson.se/assets/mikeross.png" alt="" />
-      <p class="message-text">{{text}}</p>
+      <div class="text-wrapper">
+        <div class="text-wrapper__data">
+          <span class="message-name">{{name}}</span>
+          <span class="message-time">{{time}}</span>
+        </div>
+        <span class="message-text">{{text}}</span>
+      </div>
+
+
     </li>
     {{/each}}
   </script>

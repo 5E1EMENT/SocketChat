@@ -16,8 +16,6 @@ app.get('/', function(req, res){
 //Когда соединяемся с клиентом
 io.on('connection', function(socket){
 
-
-
     //Передаем значение сообщения
     socket.on('chat message', function(msg){
         io.sockets.emit('chat message', msg);
@@ -41,13 +39,16 @@ io.on('connection', function(socket){
         //Если уже есть такой ник
         if(clients[socket.client.id]) {
             clients[socket.client.id]= fio;
+            //clients[socket.client.id]= loginData;
         } else { //Если нет, то создаем пустой массив и пушим
             clients[socket.client.id] = [];
             clients[socket.client.id] = fio;
+            //clients[socket.client.id] = loginData;
         }
 
 
         io.sockets.emit('clientsData',  {data: clients });
+
 
         console.log(clients);
     });
