@@ -11,23 +11,6 @@ var clients = {};
 app.use(cors());
 app.use(upload());
 
-app.post("/", function (req, res) {
-    console.log(req.files.file)
-    if(req.files) {
-        var filename = req.files.file.name;
-        req.files.file.mv("./upload/"+filename, function (err) {
-            if(err) {
-                console.log(err);
-                res.send("error occured")
-            } else {
-                res.send("Done!")
-            }
-        })
-        console.log(req.files);
-    }
-})
-
-
 
 app.use(express.static(__dirname));
 
@@ -36,6 +19,33 @@ app.get('/', function(req, res){
     res.sendFile(__dirname + '/index.html');
 });
 
+//Функция загрузки фото
+app.post("/", function (req, res) {
+    let yourid = req.query.yourid;
+    // console.log("ВОТ",req.query.yourid);
+    if(req.files) {
+        var filename = req.files.file.name;
+        req.files.file.mv("./dist/assets/img/"+filename, function (err) {
+            if(err) {
+                console.log(err);
+                res.send("error occured")
+            } else {
+                res.send("Done!")
+                //Если уже есть такой номер
+                if(clients[yourid]) {
+                    clients[yourid].push(filename);
+                } else { //Если нет, то создаем пустой массив и пушим
+                    clients[yourid] = [];
+                    clients[yourid].push(filename);
+                }
+
+                console.log("Клиенты",clients);
+            }
+        })
+
+
+    }
+})
 
 //Когда соединяемся с чатом
 io.on('connection', function(socket){
@@ -44,15 +54,15 @@ io.on('connection', function(socket){
     socket.on('chat message', function(msg){
 
         //Передаем сообщение и имя того, кто отправляет
-        io.sockets.emit('chat message', msg,clients[socket.client.id]);
-        console.log(msg,clients[socket.client.id]);
+        io.sockets.emit('chat message', msg,clients[socket.id]);
+        console.log(msg,socket.id);
     });
 
     //При отключении пользователя, обновить результат
     socket.on('disconnect', function() {
         io.sockets.emit('eventClient',  {data: io.engine.clientsCount });
-        console.log("То, что удаляем",clients[socket.client.id]);
-        delete clients[socket.client.id];
+        console.log("То, что удаляем",clients[socket.id]);
+        delete clients[socket.id];
         console.log(clients);
         io.sockets.emit('clientsData',  {data: clients });
     });
@@ -60,18 +70,16 @@ io.on('connection', function(socket){
     //Событие по клику на кнопку войти
     socket.on('eventSubmitClient', function (loginData,fio) {
 
-        let AuthorizationData = loginData;
-
         //Если уже есть такой номер
-        if(clients[socket.client.id]) {
-            clients[socket.client.id]= fio;
+        if(clients[socket.id]) {
+            clients[socket.id]= [fio];
         } else { //Если нет, то создаем пустой массив и пушим
-            clients[socket.client.id] = [];
-            clients[socket.client.id] = fio;
+            clients[socket.id] = [];
+            clients[socket.id] = [fio];
         }
 
 
-        io.sockets.emit('clientsData',  {data: clients });
+        io.sockets.emit('clientsData',  {data: clients, yourid: socket.id});
 
 
         //console.log(clients);

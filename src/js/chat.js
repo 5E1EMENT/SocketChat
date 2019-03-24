@@ -44,39 +44,41 @@ window.onload = function() {
 
     socket.on('chat message', function(msg,name){
 
-            let username = name;
+        let username = name[0];
+        let image = "./assets/img/"+name[1];
 
-            let dateComment = new Date();
-            let dateOptionsComment = {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                hour: 'numeric',
-                minute: 'numeric'
-            };
-            let finalDateComment = dateComment.toLocaleString("ru", dateOptionsComment);
+        let dateComment = new Date();
+        let dateOptionsComment = {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric'
+        };
+        let finalDateComment = dateComment.toLocaleString("ru", dateOptionsComment);
 
-            let comment = {
-                "text": msg,
-                "time": finalDateComment,
-                "name": username
-            }
+        let comment = {
+            "text": msg,
+            "time": finalDateComment,
+            "name": username,
+            "img": image
+        }
 
-            //Ключём будет дата запуска чата
-            if (dataComments[dateStart]) {
+        //Ключём будет дата запуска чата
+        if (dataComments[dateStart]) {
 
-                dataComments[dateStart].push(comment);
-            } else { //Если нет, то создаем пустой массив и пушим
-                dataComments[dateStart] = [];
-                dataComments[dateStart].push(comment);
-            }
-            for (var key in dataComments) {
-                console.log(key);
-                const htmlComments = render(dataComments[key]);//Берем данные из массива
-                messages.innerHTML = htmlComments;//Запихиваем в html
+            dataComments[dateStart].push(comment);
+        } else { //Если нет, то создаем пустой массив и пушим
+            dataComments[dateStart] = [];
+            dataComments[dateStart].push(comment);
+        }
+        for (var key in dataComments) {
+            console.log(key);
+            const htmlComments = render(dataComments[key]);//Берем данные из массива
+            messages.innerHTML = htmlComments;//Запихиваем в html
 
 
-            }
+        }
 
         chatInput.focus();
 

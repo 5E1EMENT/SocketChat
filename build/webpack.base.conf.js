@@ -27,13 +27,15 @@ module.exports = {
       test: /\.js$/,
       loader: 'babel-loader',
       exclude: '/node_modules/'
-    }, {
-      test: /\.(png|jpg|gif|svg)$/,
-      loader: 'file-loader',
-      options: {
-        name: '[name].[ext]'
-      }
-    }, {
+    },
+    //     {
+    //   test: /\.(png|jpg|gif|svg)$/,
+    //   loader: 'file-loader',
+    //   options: {
+    //     name: '[name].[ext]'
+    //   }
+    // }
+     {
       test: /\.scss$/,
       use: [
         'style-loader',
@@ -63,7 +65,8 @@ module.exports = {
         }
       ]
     }]
-  },
+  }
+  ,
   plugins: [
     new MiniCssExtractPlugin({
       filename: `${PATHS.assets}css/[name].css`,
@@ -74,7 +77,7 @@ module.exports = {
       filename: './index.html'
     }),
     new CopyWebpackPlugin([
-      { from: `${PATHS.src}/img`, to: `${PATHS.assets}img` },
+      { from: `${PATHS.src}/img`, to: `${PATHS.assets}/img` },
       { from: `${PATHS.src}/static`, to: '' },
     ])
   ],

@@ -7,8 +7,8 @@ let profileName = document.querySelector('.profile-name');
 let profileImg = document.getElementById('profile-img');
 let contacts = document.querySelector('#contacts ul');
 let participants = document.querySelector('#participants h3');
-
 let messages = document.querySelector('.messages-list');
+
 
 const template = document.querySelector('#users').textContent;
 const render = Handlebars.compile(template);
@@ -26,7 +26,7 @@ enter.addEventListener('click', function (e) {
 
         //Отправляем на сервер с событием eventSubmitClient данные
         socket.emit('eventSubmitClient', nickValue, fioValue);
-
+console.log(nickValue, fioValue);
         //Убираем модалку
         modal.style.display = 'none';
 
@@ -36,9 +36,11 @@ enter.addEventListener('click', function (e) {
         //В ответ получаем данные о всех участниках
         socket.on('clientsData', function (data) {
 
+            let dataClients = data.data; // Массив с данными
 
-            let dataClients = data; // Массив с данными
+            //console.log(data.yourid);
 
+            global.yourid = data.yourid;
              //Массив со значениями участников
             let ClientData = Object.values(dataClients);
 
@@ -71,7 +73,7 @@ enter.addEventListener('click', function (e) {
                     }
 
                     //console.log(users[participantKey]);
-
+                    console.log("Вот",users)
                     const htmlUsers = render(users[participantKey]);//Берем данные из массива
                     contacts.innerHTML = htmlUsers;//Запихиваем в html
 

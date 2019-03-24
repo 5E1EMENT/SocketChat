@@ -65,8 +65,8 @@ function handleDrop(e) {
 //Функция загрузки файла
 function uploadFile(file) {
 
-
-        var url = 'http://localhost:3000/';
+        console.log()
+        var url = `http://localhost:3000?yourid=${yourid}`;
         var xhr = new XMLHttpRequest();
         var formData = new FormData();
         xhr.open('POST', url, true);
@@ -75,6 +75,8 @@ function uploadFile(file) {
             if (xhr.readyState == 4 && xhr.status == 200) {
                 // Готово. Информируем пользователя
                 console.log("загрузилось")
+                closePopup();
+
             }
             else if (xhr.readyState == 4 && xhr.status != 200) {
                 // Ошибка. Информируем пользователя
@@ -120,12 +122,12 @@ uploadBtnCancel.addEventListener('click', function () {
     title.style.display = 'block';
 }, false)
 
-uploadCloseBtn.addEventListener('click', function () {
+function closePopup() {
     if(document.querySelector('.perloaded-img')) {
         document.querySelector('.perloaded-img').remove();
     }
     fileElem.value = '';
     upload.style.display = 'none';
     title.style.display = 'block';
-
-}, false)
+}
+uploadCloseBtn.addEventListener('click', closePopup, false)

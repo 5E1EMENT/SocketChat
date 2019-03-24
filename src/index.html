@@ -65,6 +65,7 @@
             <form class="upload-area">
               <h3 class="upload-area__title">Перетащите сюда фото</h3>
               <input type="file" id="fileElem" accept="image/*" >
+              <input type="hidden" id="myId" value="12345" name="myId" >
             </form>
             <div class="upload-btn__wrapper">
               <button id="uploadBtnCancel" class="upload-btn cancel">Отмена</button>
@@ -90,7 +91,7 @@
   <script id="comments" type="text/x-handlebars-template">
     {{#each this}}
     <li class="message sent">
-      <img id="chat-img" src="/assets/img/no-photo.png" class="online" alt="" />
+      <img id="chat-img" src="{{img}}" class="online" alt="" />
       <div class="text-wrapper">
         <div class="text-wrapper__data">
           <span class="message-name">{{name}}</span>
