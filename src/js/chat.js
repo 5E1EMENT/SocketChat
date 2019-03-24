@@ -7,10 +7,14 @@ window.onload = function() {
     let submitbtn = document.querySelector('.submit');
     let participants = document.querySelector('.participants-number');
     let chatInput = document.querySelector('.chat-input');
-
+    let profileWrap = document.querySelector('.wrap');
     //Через Handlebars выводим все данные из data
     const template = document.querySelector('#comments').textContent;
     const render = Handlebars.compile(template);
+
+    const template1 = document.querySelector('#user-img').textContent;
+    const render1 = Handlebars.compile(template1);
+
     const body = document.body;
 
     //Массив с комментариями
@@ -45,7 +49,13 @@ window.onload = function() {
     socket.on('chat message', function(msg,name){
 
         let username = name[0];
-        let image = "./assets/img/"+name[1];
+        let image
+        if(name[1] == undefined) {
+            image = "./assets/img/no-photo.png";
+        } else {
+            image = "./assets/img/"+name[1];
+        }
+
 
         let dateComment = new Date();
         let dateOptionsComment = {
@@ -57,25 +67,30 @@ window.onload = function() {
         };
         let finalDateComment = dateComment.toLocaleString("ru", dateOptionsComment);
 
+
         let comment = {
             "text": msg,
             "time": finalDateComment,
             "name": username,
             "img": image
         }
-
+        if(comment.img == undefined) {
+            comment.img = 'no-photo.png';
+            console.log(comment.img);
+        }
         //Ключём будет дата запуска чата
         if (dataComments[dateStart]) {
-
             dataComments[dateStart].push(comment);
         } else { //Если нет, то создаем пустой массив и пушим
             dataComments[dateStart] = [];
             dataComments[dateStart].push(comment);
         }
         for (var key in dataComments) {
-            console.log(key);
+            console.log(dataComments[key]);
             const htmlComments = render(dataComments[key]);//Берем данные из массива
+            const htmlComments1 = render1(dataComments[key]);//Берем данные из массива
             messages.innerHTML = htmlComments;//Запихиваем в html
+            profileWrap.innerHTML = htmlComments1;//Запихиваем в html
 
 
         }

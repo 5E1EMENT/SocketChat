@@ -38,7 +38,7 @@ console.log(nickValue, fioValue);
 
             let dataClients = data.data; // Массив с данными
 
-            //console.log(data.yourid);
+            console.log(dataClients);
 
             global.yourid = data.yourid;
              //Массив со значениями участников

@@ -78,7 +78,6 @@ io.on('connection', function(socket){
             clients[socket.id] = [fio];
         }
 
-
         io.sockets.emit('clientsData',  {data: clients, yourid: socket.id});
 
 

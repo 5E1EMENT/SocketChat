@@ -1,5 +1,5 @@
 let upload = document.querySelector('.upload');
-let profile = document.getElementById("profile-img");
+let profile = document.querySelector('.profile-img');
 let dropzone = document.querySelector('.upload-area');
 let title = document.querySelector('.upload-area__title');
 let uploadButtonsWrapper = document.querySelector('.upload-btn__wrapper');
@@ -7,10 +7,17 @@ let uploadBtnCancel = document.querySelector('#uploadBtnCancel');
 let uploadCloseBtn = document.querySelector('.close');
 let fileElem = document.getElementById("fileElem");
 
-profile.addEventListener('click', function () {
-    if(profile.classList.contains('clickable')) {
-        upload.style.display = 'flex';
+document.addEventListener('click', function (e) {
+
+    let target = e.target;
+    if(target.classList.contains('online')) {
+        console.log(1)
+        if(profile.classList.contains('clickable')) {
+            upload.style.display = 'flex';
+            console.log(2)
+        }
     }
+
 
 });
 
